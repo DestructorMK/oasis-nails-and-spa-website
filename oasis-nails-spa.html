@@ -397,144 +397,168 @@
   /* ── SERVICES ── */
   #services { background: var(--warm-white); }
   .services-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 3.5rem;
-    gap: 2rem;
-    flex-wrap: wrap;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 3.5rem; gap: 2rem; flex-wrap: wrap;
   }
   .services-header-text .section-title { margin-bottom: 0; }
   .services-link {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--charcoal-light);
-    text-decoration: none;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 2px;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--charcoal-light);
+    text-decoration: none; border-bottom: 1px solid var(--border);
+    padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap;
   }
   .services-link:hover { color: var(--charcoal); border-color: var(--charcoal); }
-  .services-grid {
+
+  /* ── INTERACTIVE MENU ── */
+  .menu-stage {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-  }
-  .service-card {
-    background: var(--warm-white);
-    cursor: pointer;
-    position: relative;
+    grid-template-columns: 1fr 1fr 1fr 0fr;
+    min-height: 70vh;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    border: 1px solid var(--border-soft);
+    transition: grid-template-columns 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  .service-card:hover { z-index: 2; box-shadow: 0 8px 40px rgba(44,37,32,0.10); }
-  .service-img-wrap {
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    position: relative;
+  .menu-stage.expanded-0 { grid-template-columns: 28fr 0fr 0fr 72fr; }
+  .menu-stage.expanded-1 { grid-template-columns: 0fr 28fr 0fr 72fr; }
+  .menu-stage.expanded-2 { grid-template-columns: 0fr 0fr 28fr 72fr; }
+
+  .menu-cat-card {
+    position: relative; overflow: hidden; cursor: pointer;
+    min-width: 0; display: flex; flex-direction: column;
   }
-  .service-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  .menu-cat-card:focus-visible { outline: 2px solid var(--taupe-dark); outline-offset: -2px; }
+  .menu-cat-card::after {
+    content: ''; position: absolute; top: 0; bottom: 0; right: 0;
+    width: 1px; background: rgba(44,37,32,0.10); pointer-events: none; z-index: 3;
   }
-  .service-card:hover .service-img { transform: scale(1.06); }
-  .service-img-placeholder {
-    width: 100%; height: 100%;
+  .menu-cat-card[data-cat="2"]::after { display: none; }
+
+  .menu-cat-bg {
+    position: absolute; inset: 0; z-index: 1; transition: opacity 0.4s;
+  }
+  .menu-cat-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    z-index: 0;
+    transition: opacity 0.4s, transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .menu-cat-card:hover .menu-cat-img { transform: scale(1.03); }
+  .menu-cat-card.active .menu-cat-img { opacity: 0.35; }
+  .menu-stage[class*="expanded"] .menu-cat-card:not(.active) .menu-cat-img { opacity: 0.6; }
+  /* Photo cards get a bottom-to-top darken for text legibility */
+  .menu-cat-bg-m { background: linear-gradient(to top, rgba(30,24,20,0.65) 0%, rgba(30,24,20,0.15) 55%, transparent 100%); }
+  .menu-cat-bg-p { background: linear-gradient(to top, rgba(30,24,20,0.65) 0%, rgba(30,24,20,0.15) 55%, transparent 100%); }
+  .menu-cat-bg-w { background: linear-gradient(to top, rgba(30,24,20,0.65) 0%, rgba(30,24,20,0.15) 55%, transparent 100%); }
+
+  .menu-cat-content {
+    position: relative; z-index: 3; flex: 1;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2.5rem 2rem; transition: opacity 0.25s;
+  }
+  .menu-cat-name {
+    font-family: var(--ff-display); font-size: clamp(1.25rem, 2.5vw, 2rem);
+    font-weight: 500; font-style: italic; color: var(--charcoal);
+    margin-bottom: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .menu-cat-hint {
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--charcoal-light); transition: opacity 0.25s;
+  }
+  .menu-cat-card:hover .menu-cat-hint { opacity: 0.6; }
+  /* Photo cards: light text over the darkening gradient overlay */
+  .menu-cat-card[data-photo] .menu-cat-name { color: var(--warm-white); }
+  .menu-cat-card[data-photo] .menu-cat-hint { color: rgba(253,251,248,0.75); }
+
+  /* Non-active cards when menu is open */
+  .menu-stage[class*="expanded"] .menu-cat-card:not(.active) .menu-cat-content {
+    opacity: 0; pointer-events: none;
+  }
+  .menu-stage[class*="expanded"] .menu-cat-card:not(.active) {
+    justify-content: center; align-items: center;
+  }
+
+  /* Active (compressed) card */
+  .menu-cat-card.active { cursor: default; }
+  .menu-cat-card.active .menu-cat-content { display: none; }
+  .menu-cat-card.active .menu-cat-bg { opacity: 0.5; }
+
+  /* Detail panel */
+  .menu-detail {
+    min-width: 0; overflow: hidden;
+    background: var(--warm-white); display: flex; flex-direction: column;
+    border-left: 1px solid var(--border-soft);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s 0.25s;
+  }
+  .menu-stage[class*="expanded"] .menu-detail { opacity: 1; pointer-events: auto; }
+
+  .menu-detail-head {
+    padding: 2rem 2.5rem 1.5rem; border-bottom: 1px solid var(--border-soft);
+    flex-shrink: 0; display: flex; align-items: center;
+    justify-content: space-between; gap: 1rem;
+  }
+  .menu-detail-title {
+    font-family: var(--ff-display); font-size: 1.5rem;
+    font-style: italic; font-weight: 500; color: var(--charcoal);
+  }
+  .menu-detail-close {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: none; border: 1px solid var(--border); cursor: pointer;
     display: flex; align-items: center; justify-content: center;
+    color: var(--charcoal-light); flex-shrink: 0;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
-  .sip-1 { background: linear-gradient(150deg, #F5E6DF 0%, #E8CEBC 100%); }
-  .sip-2 { background: linear-gradient(150deg, #EDE8E3 0%, #D9CFC8 100%); }
-  .sip-3 { background: linear-gradient(150deg, #E8DDD8 0%, #C9B5A9 100%); }
-  .sip-4 { background: linear-gradient(150deg, #F2EAE6 0%, #DECCBF 100%); }
-  .sip-5 { background: linear-gradient(150deg, #EBE3DE 0%, #D0C0B7 100%); }
-  .sip-6 { background: linear-gradient(150deg, #F4E8E3 0%, #E3CCBF 100%); }
-  .sip-7 { background: linear-gradient(150deg, #E6DDD8 0%, #C8B5AA 100%); }
-  .sip-8 { background: linear-gradient(150deg, #F0E4DC 0%, #D9C4B5 100%); }
-  .service-cat {
-    position: absolute;
-    top: 1rem; left: 1rem;
-    font-size: 0.625rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--warm-white);
-    background: rgba(44,37,32,0.55);
-    backdrop-filter: blur(6px);
-    padding: 0.3rem 0.7rem;
-    border-radius: 2px;
+  .menu-detail-close:hover { background: var(--charcoal); color: var(--warm-white); border-color: var(--charcoal); }
+
+  .menu-detail-body {
+    flex: 1; overflow-y: auto; padding: 1.5rem 2.5rem 2.5rem;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
   }
-  .service-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(44,37,32,0.7) 0%, transparent 55%);
-    opacity: 0;
-    transition: opacity 0.35s;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.25rem;
+  .menu-detail-body::-webkit-scrollbar { width: 4px; }
+  .menu-detail-body::-webkit-scrollbar-track { background: transparent; }
+  .menu-detail-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .menu-group { margin-bottom: 2.5rem; }
+  .menu-group:last-child { margin-bottom: 0; }
+  .menu-group-title {
+    font-size: 0.625rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--stone);
+    margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-soft);
   }
-  .service-card:hover .service-overlay { opacity: 1; }
-  .service-overlay-desc {
-    font-size: 0.8125rem;
-    font-weight: 300;
-    color: rgba(253,251,248,0.9);
-    line-height: 1.6;
-    transform: translateY(8px);
-    transition: transform 0.35s;
+  .menu-item {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 0.2rem 1.5rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--border-soft); align-items: start;
   }
-  .service-card:hover .service-overlay-desc { transform: translateY(0); }
-  .service-info {
-    padding: 1.25rem 1.25rem 1.5rem;
-    border-top: 1px solid var(--border-soft);
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item-name {
+    font-family: var(--ff-display); font-size: 1rem;
+    font-weight: 500; color: var(--charcoal);
   }
-  .service-name {
-    font-family: var(--ff-display);
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--charcoal);
-    margin-bottom: 0.35rem;
+  .menu-item-desc {
+    font-size: 0.8125rem; font-weight: 300; color: var(--charcoal-light);
+    line-height: 1.6; grid-column: 1; margin-top: 0.2rem;
   }
-  .service-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
+  .menu-item-note {
+    font-size: 0.6875rem; font-weight: 400; color: var(--stone);
+    font-style: italic; margin-top: 0.2rem; grid-column: 1;
   }
-  .service-duration {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--stone);
+  .menu-item-right {
+    display: flex; align-items: flex-start; justify-content: flex-end;
+    padding-top: 0.1rem;
   }
-  .service-price {
-    font-family: var(--ff-display);
-    font-size: 1.0625rem;
-    font-weight: 500;
-    color: var(--taupe-dark);
-    transition: color 0.2s;
+  .menu-item-price {
+    font-family: var(--ff-display); font-size: 1rem;
+    font-weight: 500; color: var(--taupe-dark); white-space: nowrap; text-align: right;
   }
-  .service-card:hover .service-price { color: var(--charcoal); }
-  .service-book {
-    margin-top: 0.875rem;
-    width: 100%;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--charcoal);
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 0.6rem;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
+  .menu-item-book {
+    display: inline-block; margin-top: 0.5rem;
+    font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--charcoal);
+    background: none; border: none; border-bottom: 1px solid var(--nude);
+    padding: 0 0 2px; cursor: pointer; transition: border-color 0.2s; white-space: nowrap;
   }
-  .service-book:hover { background: var(--charcoal); color: var(--warm-white); border-color: var(--charcoal); }
+  .menu-item-book:hover { border-color: var(--charcoal); }
 
   /* ── ARTISTS ── */
   #artists { background: var(--cream); }
@@ -635,6 +659,118 @@
     border-bottom: 1px solid var(--nude);
   }
   .artist-book:hover { border-color: var(--charcoal); }
+
+  /* ── ARTIST CAROUSEL ── */
+  .carousel-stage {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .carousel-viewport {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .carousel-track {
+    display: flex;
+    gap: 24px;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-card {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    background: var(--warm-white);
+    border: 1px solid var(--border-soft);
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  .carousel-card:hover { box-shadow: 0 6px 32px rgba(44,37,32,0.08); }
+  .carousel-card-img-wrap { aspect-ratio: 3/4; overflow: hidden; }
+  .carousel-card-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+    filter: grayscale(20%);
+  }
+  .carousel-card:hover .carousel-card-img { transform: scale(1.04); filter: grayscale(0%); }
+  .carousel-card-info {
+    padding: 1.25rem 1.25rem 1.5rem;
+    border-top: 1px solid var(--border-soft);
+  }
+  .carousel-card-name {
+    font-family: var(--ff-display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 0.75rem;
+  }
+  .carousel-card-book {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--nude);
+    padding: 0 0 2px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .carousel-card-book:hover { border-color: var(--charcoal); }
+  .carousel-btn {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--charcoal);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    box-shadow: 0 1px 8px rgba(44,37,32,0.06);
+  }
+  .carousel-btn:hover:not(:disabled) {
+    background: var(--charcoal);
+    color: var(--warm-white);
+    border-color: var(--charcoal);
+  }
+  .carousel-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .carousel-dots {
+    overflow: hidden;
+    width: 90px;
+    margin: 1.75rem auto 0;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 22%, black 78%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 22%, black 78%, transparent);
+  }
+  .carousel-dots-track {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .carousel-dot {
+    width: 15px; height: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .carousel-dot::after {
+    content: '';
+    border-radius: 50%;
+    transition: width 0.3s, height 0.3s, background-color 0.3s, opacity 0.3s;
+  }
+  .carousel-dot.active::after { width: 8px;  height: 8px;  background: var(--charcoal); opacity: 1; }
+  .carousel-dot.near::after   { width: 6px;  height: 6px;  background: var(--stone);    opacity: 0.6; }
+  .carousel-dot.far::after    { width: 4px;  height: 4px;  background: var(--nude);     opacity: 0.45; }
 
   /* ── POLICY ── */
   #policy {
@@ -1017,7 +1153,6 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 1100px) {
-    .services-grid { grid-template-columns: repeat(2, 1fr); }
     .artists-grid { grid-template-columns: repeat(2, 1fr); }
     .artists-intro { grid-template-columns: 1fr; gap: 2rem; }
   }
@@ -1037,12 +1172,40 @@
     .sticky-book { display: block; }
     footer { padding-bottom: 6rem; }
     .artists-grid { grid-template-columns: 1fr; }
-    .services-grid { grid-template-columns: 1fr 1fr; }
+    .menu-stage {
+      display: flex; flex-direction: column; min-height: auto; transition: none;
+    }
+    .menu-cat-card {
+      height: 35vw; min-height: 140px; max-height: 260px; flex-shrink: 0;
+      transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .menu-cat-card::after {
+      top: auto; right: 0; left: 0; bottom: 0; width: 100%; height: 1px;
+    }
+    .menu-cat-card[data-cat="2"]::after { display: block; }
+    .menu-detail {
+      border-left: none; border-top: 1px solid var(--border-soft);
+      max-height: 0; overflow: hidden; opacity: 1; pointer-events: none;
+      transition: max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .menu-stage[class*="expanded"] .menu-cat-card:not(.active) { display: none; }
+    .menu-stage[class*="expanded"] .menu-cat-card.active {
+      height: 22vw; min-height: 100px; max-height: 160px;
+    }
+    .menu-stage[class*="expanded"] .menu-detail {
+      max-height: 70vh; overflow-y: auto; pointer-events: auto; opacity: 1;
+    }
+    .menu-detail-head { padding: 1.5rem 1.5rem 1.25rem; }
+    .menu-detail-body { padding: 1.25rem 1.5rem 2rem; }
+    .carousel-track { gap: 16px; }
+    .carousel-btn { display: none; }
+    .carousel-stage { gap: 0; }
   }
   @media (max-width: 500px) {
-    .services-grid { grid-template-columns: 1fr; }
+    .menu-cat-card { height: 28vw; min-height: 110px; }
     .about-pillars { grid-template-columns: 1fr; }
     .hero-actions { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .carousel-track { gap: 12px; }
   }
 </style>
 </head>
@@ -1185,153 +1348,43 @@
       </div>
       <a href="#" class="services-link reveal reveal-delay-2" onclick="openBooking(null); return false;">View all &amp; book →</a>
     </div>
-    <div class="services-grid reveal">
-      <!-- Card 1 -->
-      <article class="service-card" onclick="openBooking('Gel Manicure')" tabindex="0" role="button" aria-label="Book Gel Manicure, from $55">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-1">
-            <!-- <img class="service-img" src="/images/services/gel-mani.jpg" alt="Gel Manicure"> -->
-          </div>
-          <span class="service-cat">Manicure</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">A flawless gel finish that lasts two to three weeks with zero chipping. Shape, prep, and polish to perfection.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Gel Manicure</h3>
-          <div class="service-meta">
-            <span class="service-duration">60–75 min</span>
-            <span class="service-price">From $55</span>
-          </div>
-          <button class="service-book" aria-label="Book Gel Manicure">Book this service</button>
+    <div class="menu-stage reveal" id="menu-stage">
+      <article class="menu-cat-card" data-cat="0" data-photo role="button" tabindex="0"
+               aria-label="Explore Manicures menu" aria-expanded="false">
+        <div class="menu-cat-bg menu-cat-bg-m" aria-hidden="true"></div>
+        <img class="menu-cat-img" src="Assets/manicure.jpg" alt="" aria-hidden="true">
+        <div class="menu-cat-content">
+          <h3 class="menu-cat-name">Manicures</h3>
+          <span class="menu-cat-hint">Tap to explore</span>
         </div>
       </article>
-      <!-- Card 2 -->
-      <article class="service-card" onclick="openBooking('Acrylic Full Set')" tabindex="0" role="button" aria-label="Book Acrylic Full Set, from $75">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-2"></div>
-          <span class="service-cat">Extensions</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">Sculpted acrylic with your choice of length, shape, and finish. Built to last and made to turn heads.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Acrylic Full Set</h3>
-          <div class="service-meta">
-            <span class="service-duration">90–120 min</span>
-            <span class="service-price">From $75</span>
-          </div>
-          <button class="service-book" aria-label="Book Acrylic Full Set">Book this service</button>
+      <article class="menu-cat-card" data-cat="1" data-photo role="button" tabindex="0"
+               aria-label="Explore Pedicures menu" aria-expanded="false">
+        <div class="menu-cat-bg menu-cat-bg-p" aria-hidden="true"></div>
+        <img class="menu-cat-img" src="Assets/pedicure.jpg" alt="" aria-hidden="true">
+        <div class="menu-cat-content">
+          <h3 class="menu-cat-name">Pedicures</h3>
+          <span class="menu-cat-hint">Tap to explore</span>
         </div>
       </article>
-      <!-- Card 3 -->
-      <article class="service-card" onclick="openBooking('Builder Gel')" tabindex="0" role="button" aria-label="Book Builder Gel, from $70">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-3"></div>
-          <span class="service-cat">Extensions</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">A flexible, odor-free alternative to acrylic. BIAB strengthens the natural nail while adding length and structure.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Builder Gel</h3>
-          <div class="service-meta">
-            <span class="service-duration">75–90 min</span>
-            <span class="service-price">From $70</span>
-          </div>
-          <button class="service-book" aria-label="Book Builder Gel">Book this service</button>
+      <article class="menu-cat-card" data-cat="2" data-photo role="button" tabindex="0"
+               aria-label="Explore Waxing menu" aria-expanded="false">
+        <div class="menu-cat-bg menu-cat-bg-w" aria-hidden="true"></div>
+        <img class="menu-cat-img" src="Assets/waxing.jpg" alt="" aria-hidden="true">
+        <div class="menu-cat-content">
+          <h3 class="menu-cat-name">Waxing</h3>
+          <span class="menu-cat-hint">Tap to explore</span>
         </div>
       </article>
-      <!-- Card 4 -->
-      <article class="service-card" onclick="openBooking('Nail Art')" tabindex="0" role="button" aria-label="Book Nail Art, from $25 add-on">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-4"></div>
-          <span class="service-cat">Art & Design</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">From quiet minimalism to detailed illustration — our artists work in freehand, foil, chrome, and 3D design.</p>
-          </div>
+      <div class="menu-detail" id="menu-detail" role="region" aria-label="Service detail" aria-live="polite">
+        <div class="menu-detail-head">
+          <h3 class="menu-detail-title" id="menu-detail-title"></h3>
+          <button class="menu-detail-close" id="menu-detail-close" aria-label="Close menu">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
         </div>
-        <div class="service-info">
-          <h3 class="service-name">Nail Art</h3>
-          <div class="service-meta">
-            <span class="service-duration">30+ min add-on</span>
-            <span class="service-price">From $25</span>
-          </div>
-          <button class="service-book" aria-label="Book Nail Art">Book this service</button>
-        </div>
-      </article>
-      <!-- Card 5 -->
-      <article class="service-card" onclick="openBooking('Gel X Extensions')" tabindex="0" role="button" aria-label="Book Gel X Extensions, from $80">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-5"></div>
-          <span class="service-cat">Extensions</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">Apres Gel X — full-coverage soft gel tips applied with no filing, no damage. A gentler extension with beautiful results.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Gel X Extensions</h3>
-          <div class="service-meta">
-            <span class="service-duration">75–90 min</span>
-            <span class="service-price">From $80</span>
-          </div>
-          <button class="service-book" aria-label="Book Gel X Extensions">Book this service</button>
-        </div>
-      </article>
-      <!-- Card 6 -->
-      <article class="service-card" onclick="openBooking('Classic Pedicure')" tabindex="0" role="button" aria-label="Book Classic Pedicure, from $50">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-6"></div>
-          <span class="service-cat">Pedicure</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">A thorough pedicure with soak, exfoliation, cuticle care, massage, and your choice of regular or gel polish.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Classic Pedicure</h3>
-          <div class="service-meta">
-            <span class="service-duration">50–60 min</span>
-            <span class="service-price">From $50</span>
-          </div>
-          <button class="service-book" aria-label="Book Classic Pedicure">Book this service</button>
-        </div>
-      </article>
-      <!-- Card 7 -->
-      <article class="service-card" onclick="openBooking('Spa Pedicure')" tabindex="0" role="button" aria-label="Book Spa Pedicure, from $75">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-7"></div>
-          <span class="service-cat">Pedicure</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">An elevated pedicure with hot stone massage, paraffin wax treatment, and a collagen-infused moisture wrap.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Spa Pedicure</h3>
-          <div class="service-meta">
-            <span class="service-duration">75–90 min</span>
-            <span class="service-price">From $75</span>
-          </div>
-          <button class="service-book" aria-label="Book Spa Pedicure">Book this service</button>
-        </div>
-      </article>
-      <!-- Card 8 -->
-      <article class="service-card" onclick="openBooking('Dip Powder')" tabindex="0" role="button" aria-label="Book Dip Powder, from $60">
-        <div class="service-img-wrap">
-          <div class="service-img-placeholder sip-8"></div>
-          <span class="service-cat">Manicure</span>
-          <div class="service-overlay" aria-hidden="true">
-            <p class="service-overlay-desc">Long-lasting color that won't chip or fade — no UV light needed. A great option for a healthy, natural look.</p>
-          </div>
-        </div>
-        <div class="service-info">
-          <h3 class="service-name">Dip Powder</h3>
-          <div class="service-meta">
-            <span class="service-duration">60–75 min</span>
-            <span class="service-price">From $60</span>
-          </div>
-          <button class="service-book" aria-label="Book Dip Powder">Book this service</button>
-        </div>
-      </article>
+        <div class="menu-detail-body" id="menu-detail-body"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1346,49 +1399,19 @@
       </div>
       <p class="artists-body reveal reveal-delay-2">Each member of our team is selected for their skill, their attention to detail, and their ability to make you feel genuinely cared for. We train together, grow together, and take real pride in our craft.</p>
     </div>
-    <div class="artists-grid">
-      <!-- Artist 1 -->
-      <article class="artist-card reveal">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder aip-1">
-            <!-- <img class="artist-img" src="/images/artists/sophia.jpg" alt="Sophia L., Senior Nail Artist"> -->
-            S
-          </div>
+    <div class="carousel-outer reveal">
+      <div class="carousel-stage">
+        <button class="carousel-btn" id="carousel-prev-btn" aria-label="Previous artist" disabled>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+        </button>
+        <div class="carousel-viewport" id="carousel-viewport">
+          <div class="carousel-track" id="carousel-track"></div>
         </div>
-        <div class="artist-info">
-          <p class="artist-specialty">Extensions &amp; Nail Art</p>
-          <h3 class="artist-name">Sophia Laurent</h3>
-          <p class="artist-exp">8 years of experience</p>
-          <p class="artist-bio">Sophia trained in Paris before bringing her sharp, editorial eye to Raleigh. Known for her detail work and clean gel X application, she's particularly sought after for intricate nail art and bridal appointments.</p>
-          <button class="artist-book" onclick="openBooking('Gel Manicure', 'Sophia Laurent')">Book with Sophia →</button>
-        </div>
-      </article>
-      <!-- Artist 2 -->
-      <article class="artist-card reveal reveal-delay-2">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder aip-2">M</div>
-        </div>
-        <div class="artist-info">
-          <p class="artist-specialty">Acrylics &amp; Sculpting</p>
-          <h3 class="artist-name">Maya Chen</h3>
-          <p class="artist-exp">6 years of experience</p>
-          <p class="artist-bio">Maya's specialty is structural — she sculpts acrylic and builder gel with a precision that's hard to find. Her sets are consistently even, properly balanced, and built to last the full three weeks without lifting.</p>
-          <button class="artist-book" onclick="openBooking('Acrylic Full Set', 'Maya Chen')">Book with Maya →</button>
-        </div>
-      </article>
-      <!-- Artist 3 -->
-      <article class="artist-card reveal reveal-delay-3">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder aip-3">A</div>
-        </div>
-        <div class="artist-info">
-          <p class="artist-specialty">Pedicures &amp; Gel</p>
-          <h3 class="artist-name">Ava Moreau</h3>
-          <p class="artist-exp">5 years of experience</p>
-          <p class="artist-bio">Ava approaches every appointment with a calm, unhurried presence. Her spa pedicures are a genuine ritual — she takes her time, and clients always leave noticing the difference. Her gel finish is flawless.</p>
-          <button class="artist-book" onclick="openBooking('Spa Pedicure', 'Ava Moreau')">Book with Ava →</button>
-        </div>
-      </article>
+        <button class="carousel-btn" id="carousel-next-btn" aria-label="Next artist">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+        </button>
+      </div>
+      <div class="carousel-dots" id="carousel-dots" aria-hidden="true"></div>
     </div>
   </div>
 </section>
@@ -1577,12 +1600,159 @@
     if (e.key === 'Escape') closeBooking();
   });
 
-  // Keyboard support for service cards
-  document.querySelectorAll('.service-card').forEach(card => {
-    card.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+  // Interactive services menu
+  function initMenu() {
+    var MENU_DATA = {
+      0: {
+        name: 'Manicures',
+        groups: [
+          {
+            title: 'Classic & Gel',
+            items: [
+              { name: 'Classic Manicure', desc: 'Soak, shape, cuticle care, and regular polish.', price: 'From $30', duration: '45 min' },
+              { name: 'Gel Manicure', desc: 'Chip-free gel finish that lasts 2–3 weeks with zero lifting.', price: 'From $55', duration: '60–75 min' },
+              { name: 'Dip Powder', desc: 'Long-lasting color with no UV light needed. Lightweight and durable.', price: 'From $60', duration: '60–75 min' }
+            ]
+          },
+          {
+            title: 'Extensions & Enhancements',
+            items: [
+              { name: 'Acrylic Full Set', desc: 'Sculpted acrylic with your choice of length, shape, and finish.', price: 'From $75', duration: '90–120 min' },
+              { name: 'Acrylic Fill', desc: 'Maintenance fill for an existing acrylic set.', price: 'From $50', duration: '60–75 min' },
+              { name: 'Builder Gel (BIAB)', desc: 'Flexible, odor-free gel that strengthens the natural nail while adding structure.', price: 'From $70', duration: '75–90 min', note: 'Great for nail biters or brittle nails' },
+              { name: 'Gel X Extensions', desc: 'Soft gel full-coverage tips. No filing, no damage — a gentler extension.', price: 'From $80', duration: '75–90 min' }
+            ]
+          },
+          {
+            title: 'Nail Art',
+            items: [
+              { name: 'Nail Art Add-On', desc: 'Freehand designs, foil, chrome powder, or 3D embellishments on any service.', price: 'From $25', duration: '30+ min add-on', note: 'Price varies by complexity and nail count' }
+            ]
+          }
+        ]
+      },
+      1: {
+        name: 'Pedicures',
+        groups: [
+          {
+            title: 'Signature Pedicures',
+            items: [
+              { name: 'Classic Pedicure', desc: 'Soak, exfoliation, cuticle care, massage, and regular or gel polish.', price: 'From $50', duration: '50–60 min' },
+              { name: 'Gel Pedicure', desc: 'Everything in the Classic, finished with long-lasting gel polish.', price: 'From $65', duration: '60–75 min' },
+              { name: 'Spa Pedicure', desc: 'Hot stone massage, paraffin wax treatment, and a collagen-infused moisture wrap.', price: 'From $75', duration: '75–90 min' },
+              { name: 'Luxury Pedicure', desc: 'Our signature full-service experience — multi-mask treatment, extended massage, hot towel finish.', price: 'From $95', duration: '90–105 min' }
+            ]
+          },
+          {
+            title: 'Add-Ons',
+            items: [
+              { name: 'Callus Treatment', desc: 'Intensive heel smoothing with extra exfoliation. Add to any pedicure.', price: 'From $20', duration: '20 min add-on' },
+              { name: 'Paraffin Wax', desc: 'Deep moisturizing wax dip for dry or cracked skin.', price: 'From $15', duration: '15 min add-on' }
+            ]
+          }
+        ]
+      },
+      2: {
+        name: 'Waxing',
+        groups: [
+          {
+            title: 'Face',
+            items: [
+              { name: 'Eyebrow Wax', desc: 'Precise shaping for clean, defined brows.', price: 'From $20', duration: '15 min' },
+              { name: 'Upper Lip', desc: '', price: 'From $12', duration: '10 min' },
+              { name: 'Chin', desc: '', price: 'From $12', duration: '10 min' },
+              { name: 'Full Face', desc: 'Brows, lip, chin, cheeks, and sideburns in one session.', price: 'From $45', duration: '30 min' }
+            ]
+          },
+          {
+            title: 'Body',
+            items: [
+              { name: 'Underarm', desc: '', price: 'From $28', duration: '20 min' },
+              { name: 'Half Leg', desc: 'Knee to ankle or thigh to knee — specify at booking.', price: 'From $45', duration: '30 min' },
+              { name: 'Full Leg', desc: 'Complete leg wax from ankle to thigh.', price: 'From $75', duration: '45–60 min' },
+              { name: 'Bikini Line', desc: 'Clean up along the bikini line.', price: 'From $38', duration: '20–25 min' },
+              { name: 'Brazilian', desc: 'Full bikini area. Please arrive clean and dry.', price: 'From $65', duration: '45 min', note: 'Hair should be ¼ inch or longer' }
+            ]
+          }
+        ]
+      }
+    };
+
+    var stage      = document.getElementById('menu-stage');
+    var detailTitle = document.getElementById('menu-detail-title');
+    var detailBody  = document.getElementById('menu-detail-body');
+    var closeBtn    = document.getElementById('menu-detail-close');
+    if (!stage) return;
+
+    var activeIdx = -1;
+
+    function renderDetail(idx) {
+      var cat = MENU_DATA[idx];
+      detailTitle.textContent = cat.name;
+      var html = '';
+      cat.groups.forEach(function(group) {
+        html += '<div class="menu-group"><div class="menu-group-title">' + group.title + '</div>';
+        group.items.forEach(function(item) {
+          var safeName = item.name.replace(/'/g, "\\'");
+          html += '<div class="menu-item">';
+          html += '<div>';
+          html += '<div class="menu-item-name">' + item.name + '</div>';
+          if (item.desc) html += '<div class="menu-item-desc">' + item.desc + '</div>';
+          if (item.note) html += '<div class="menu-item-note">' + item.note + '</div>';
+          html += '<button class="menu-item-book" onclick="openBooking(\'' + safeName + '\')" aria-label="Book ' + item.name + '">Book →</button>';
+          html += '</div>';
+          html += '<div class="menu-item-right">';
+          html += '<div class="menu-item-price">' + item.price + '</div>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+      });
+      detailBody.innerHTML = html;
+      detailBody.scrollTop = 0;
+    }
+
+    function openCategory(idx) {
+      if (activeIdx === idx) { closeCategory(); return; }
+      activeIdx = idx;
+      stage.className = 'menu-stage expanded-' + idx;
+      stage.querySelectorAll('.menu-cat-card').forEach(function(card) {
+        var ci = parseInt(card.dataset.cat);
+        card.classList.toggle('active', ci === idx);
+        card.setAttribute('aria-expanded', ci === idx ? 'true' : 'false');
+      });
+      renderDetail(idx);
+      setTimeout(function() { if (closeBtn) closeBtn.focus(); }, 460);
+    }
+
+    function closeCategory() {
+      if (activeIdx === -1) return;
+      var prevIdx = activeIdx;
+      activeIdx = -1;
+      stage.className = 'menu-stage';
+      stage.querySelectorAll('.menu-cat-card').forEach(function(card) {
+        card.classList.remove('active');
+        card.setAttribute('aria-expanded', 'false');
+      });
+      detailBody.innerHTML = '';
+      detailTitle.textContent = '';
+      var prevCard = stage.querySelector('[data-cat="' + prevIdx + '"]');
+      if (prevCard) prevCard.focus();
+    }
+
+    stage.querySelectorAll('.menu-cat-card').forEach(function(card) {
+      card.addEventListener('click', function() { openCategory(parseInt(card.dataset.cat)); });
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCategory(parseInt(card.dataset.cat)); }
+      });
     });
-  });
+
+    closeBtn.addEventListener('click', closeCategory);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && activeIdx !== -1) closeCategory();
+    });
+  }
+  initMenu();
 
   // Nav scroll effect
   window.addEventListener('scroll', function() {
@@ -1594,6 +1764,140 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Artist Carousel
+  function initCarousel() {
+    var ARTISTS = [
+      {name:'Angie',ext:'jpg'},{name:'Anne',ext:'png'},{name:'Diana',ext:'png'},
+      {name:'Helen',ext:'png'},{name:'Janice',ext:'png'},{name:'Jenna',ext:'png'},
+      {name:'Jimmie',ext:'png'},{name:'Lee',ext:'png'},{name:'Linette',ext:'png'},
+      {name:'Lynn',ext:'png'},{name:'Nancy',ext:'png'},{name:'Ngoc',ext:'png'},
+      {name:'Rose',ext:'png'},{name:'Thery',ext:'png'}
+    ];
+    var DOT_SLOT = 15; // px — each dot occupies a fixed 15px slot in the track
+    var track    = document.getElementById('carousel-track');
+    var viewport = document.getElementById('carousel-viewport');
+    var prevBtn  = document.getElementById('carousel-prev-btn');
+    var nextBtn  = document.getElementById('carousel-next-btn');
+    var dotsEl   = document.getElementById('carousel-dots');
+    if (!track) return;
+
+    // Build cards
+    ARTISTS.forEach(function(a) {
+      var card = document.createElement('article');
+      card.className = 'carousel-card';
+      card.innerHTML =
+        '<div class="carousel-card-img-wrap">' +
+          '<img class="carousel-card-img" src="Assets/' + a.name + '.' + a.ext + '"' +
+          ' alt="' + a.name + ', nail artist at Oasis Nails &amp; Spa" loading="lazy">' +
+        '</div>' +
+        '<div class="carousel-card-info">' +
+          '<h3 class="carousel-card-name">' + a.name + '</h3>' +
+          '<button class="carousel-card-book" onclick="openBooking(null,\'' + a.name + '\')">' +
+            'Book with ' + a.name + ' →</button>' +
+        '</div>';
+      track.appendChild(card);
+    });
+
+    // Build a sliding dot track with one dot per artist
+    var dotsTrack = document.createElement('div');
+    dotsTrack.className = 'carousel-dots-track';
+    ARTISTS.forEach(function(_, i) {
+      var dot = document.createElement('span');
+      dot.className = 'carousel-dot ' + (i === 0 ? 'active' : i === 1 ? 'near' : 'far');
+      dotsTrack.appendChild(dot);
+    });
+    dotsEl.appendChild(dotsTrack);
+
+    function getVisible() {
+      var w = window.innerWidth;
+      if (w >= 1100) return 4;
+      if (w >= 800)  return 3;
+      if (w >= 500)  return 2;
+      return 1;
+    }
+
+    function setWidths() {
+      var visible = getVisible();
+      var gap     = parseFloat(getComputedStyle(track).columnGap) || 24;
+      var cardW   = (viewport.clientWidth - gap * (visible - 1)) / visible;
+      track.querySelectorAll('.carousel-card').forEach(function(c) {
+        c.style.width = cardW + 'px';
+      });
+    }
+
+    function getStep() {
+      var card = track.querySelector('.carousel-card');
+      if (!card) return 0;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+      return card.offsetWidth + gap;
+    }
+
+    function currentCard() {
+      var step = getStep();
+      return step > 0 ? Math.round(track.scrollLeft / step) : 0;
+    }
+
+    function updateDots(idx) {
+      // Map scroll position (0 → maxScroll) onto dot range (0 → last dot)
+      // so the last scroll position always activates the last dot
+      var maxScroll = ARTISTS.length - getVisible();
+      var dotIdx = maxScroll > 0
+        ? Math.round(idx / maxScroll * (ARTISTS.length - 1))
+        : 0;
+      dotsEl.querySelectorAll('.carousel-dot').forEach(function(d, i) {
+        var dist = Math.abs(i - dotIdx);
+        d.className = 'carousel-dot ' + (dist === 0 ? 'active' : dist === 1 ? 'near' : 'far');
+      });
+      var containerW = dotsEl.offsetWidth || 90;
+      var translate  = Math.round(containerW / 2 - (dotIdx + 0.5) * DOT_SLOT);
+      dotsTrack.style.transform = 'translateX(' + translate + 'px)';
+    }
+
+    function updateNav() {
+      var idx     = currentCard();
+      var visible = getVisible();
+      prevBtn.disabled = idx <= 0;
+      nextBtn.disabled = idx >= ARTISTS.length - visible;
+      updateDots(idx);
+    }
+
+    setWidths();
+    updateNav();
+
+    window.addEventListener('resize', function() { setWidths(); updateNav(); });
+    track.addEventListener('scroll', updateNav, {passive: true});
+
+    // Arrow clicks: smooth scroll by exactly one card
+    prevBtn.addEventListener('click', function() {
+      track.scrollBy({left: -getStep(), behavior: 'smooth'});
+    });
+    nextBtn.addEventListener('click', function() {
+      track.scrollBy({left: getStep(), behavior: 'smooth'});
+    });
+
+    // Wheel: batch vertical delta over 50 ms, then smooth-scroll proportionally
+    var wheelAccum = 0;
+    var wheelTimer = null;
+    track.addEventListener('wheel', function(e) {
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // let horizontal trackpad pass
+      e.preventDefault();
+      wheelAccum += e.deltaY;
+      if (wheelTimer) clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(function() {
+        var step    = getStep();
+        var advance = Math.round(wheelAccum / (step * 0.4)); // 40% of card width = 1 card
+        advance     = Math.max(-4, Math.min(4, advance));    // cap at 4 cards per gesture
+        if (advance !== 0) {
+          var target = Math.max(0, Math.min(currentCard() + advance, ARTISTS.length - 1));
+          track.scrollTo({left: target * step, behavior: 'smooth'});
+        }
+        wheelAccum = 0;
+        wheelTimer = null;
+      }, 50);
+    }, {passive: false});
+  }
+  initCarousel();
 
   // Mobile menu
   function toggleMenu() {
