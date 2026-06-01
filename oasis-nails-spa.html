@@ -468,16 +468,8 @@
   .menu-cat-card[data-photo] .menu-cat-name { color: var(--warm-white); }
   .menu-cat-card[data-photo] .menu-cat-hint { color: rgba(253,251,248,0.75); }
 
-  /* Active card - bottom indicator, all cards stay visible */
+  /* Active card */
   .menu-cat-card.active { cursor: default; }
-  .menu-cat-card.active::before {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--charcoal);
-    z-index: 4;
-  }
   .menu-cat-card.active .menu-cat-img { opacity: 0.45; }
 
   /* Detail panel - dropdown below the cards row */
@@ -571,15 +563,6 @@
     font-family: var(--ff-display); font-size: 1rem;
     font-weight: 500; color: var(--taupe-dark); white-space: nowrap; text-align: right;
   }
-  .menu-item-book {
-    display: inline-block; margin-top: 0.5rem;
-    font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--charcoal);
-    background: none; border: none; border-bottom: 1px solid var(--nude);
-    padding: 0 0 2px; cursor: pointer; transition: border-color 0.2s; white-space: nowrap;
-  }
-  .menu-item-book:hover { border-color: var(--charcoal); }
-
   /* ── ARTISTS ── */
   #artists { background: var(--cream); }
   .artists-intro {
@@ -698,7 +681,7 @@
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
   }
   .carousel-track::-webkit-scrollbar { display: none; }
   .carousel-card {
@@ -1090,12 +1073,9 @@
     padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap;
   }
   .reviews-google-link:hover { color: var(--charcoal); border-color: var(--charcoal); }
-  .reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(1rem, 2.5vw, 2rem);
-  }
   .review-card {
+    flex-shrink: 0;
+    scroll-snap-align: start;
     background: var(--warm-white);
     border: 1px solid var(--border-soft);
     padding: 1.75rem;
@@ -1137,24 +1117,15 @@
     border-bottom: 1px solid var(--nude); transition: border-color 0.2s;
   }
   .reviews-cta a:hover { border-color: var(--charcoal); }
+  #reviews-prev-btn, #reviews-next-btn { display: none; }
+  @media (min-width: 801px) {
+    #reviews-dots { display: none; }
+  }
   @media (max-width: 800px) {
     .reviews-header { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
-    .reviews-grid {
-      display: flex;
-      overflow-x: scroll;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      gap: 0;
-    }
-    .reviews-grid::-webkit-scrollbar { display: none; }
-    .review-card {
-      flex: 0 0 100%;
-      scroll-snap-align: start;
-    }
-  }
-  @media (max-width: 1100px) {
-    .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+    .carousel-card-img { filter: none; transition: none; }
+    .carousel-card:hover .carousel-card-img,
+    .carousel-card:active .carousel-card-img { transform: none; filter: none; }
   }
 
   /* ── FOOTER ── */
@@ -1529,58 +1500,71 @@
         </div>
       </div>
     </div>
-    <div class="reviews-grid">
-      <div class="review-card reveal reveal-delay-1">
-        <div class="review-card-stars" aria-label="5 stars">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="review-card-text">"Super friendly staff and a huge assortment of colors - and fantastic service."</p>
-        <div class="review-card-footer">
-          <div class="review-card-avatar">H</div>
-          <div>
-            <div class="review-card-name">Heather Laffler</div>
-            <div class="review-card-source">Google Review</div>
+    <div class="carousel-outer reveal">
+      <div class="carousel-stage">
+        <button class="carousel-btn" id="reviews-prev-btn" aria-label="Previous review" disabled>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+        </button>
+        <div class="carousel-viewport" id="reviews-viewport">
+          <div class="carousel-track" id="reviews-track">
+            <div class="review-card">
+              <div class="review-card-stars" aria-label="5 stars">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="review-card-text">"Super friendly staff and a huge assortment of colors - and fantastic service."</p>
+              <div class="review-card-footer">
+                <div class="review-card-avatar">H</div>
+                <div>
+                  <div class="review-card-name">Heather Laffler</div>
+                  <div class="review-card-source">Google Review</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-card-stars" aria-label="5 stars">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="review-card-text">"The best nail service I have received in the triangle area!"</p>
+              <div class="review-card-footer">
+                <div class="review-card-avatar">B</div>
+                <div>
+                  <div class="review-card-name">Brianna L'Hoeste</div>
+                  <div class="review-card-source">Google Review</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-card-stars" aria-label="5 stars">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="review-card-text">"Very relaxing, awesome pedicure for the price!"</p>
+              <div class="review-card-footer">
+                <div class="review-card-avatar">S</div>
+                <div>
+                  <div class="review-card-name">Sara Cuddy</div>
+                  <div class="review-card-source">Google Review</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <button class="carousel-btn" id="reviews-next-btn" aria-label="Next review">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+        </button>
       </div>
-      <div class="review-card reveal reveal-delay-2">
-        <div class="review-card-stars" aria-label="5 stars">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="review-card-text">"The best nail service I have received in the triangle area!"</p>
-        <div class="review-card-footer">
-          <div class="review-card-avatar">B</div>
-          <div>
-            <div class="review-card-name">Brianna L'Hoeste</div>
-            <div class="review-card-source">Google Review</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card reveal reveal-delay-3">
-        <div class="review-card-stars" aria-label="5 stars">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="review-card-text">"Very relaxing, awesome pedicure for the price!"</p>
-        <div class="review-card-footer">
-          <div class="review-card-avatar">S</div>
-          <div>
-            <div class="review-card-name">Sara Cuddy</div>
-            <div class="review-card-source">Google Review</div>
-          </div>
-        </div>
-      </div>
+      <div class="carousel-dots" id="reviews-dots" aria-hidden="true"></div>
     </div>
     <div class="reviews-cta reveal">
       <a href="https://www.google.com/search?q=Oasis+Nails+%26+Spa+Wake+Forest+Raleigh+reviews" target="_blank" rel="noopener" aria-label="Read all our reviews on Google">
@@ -1648,7 +1632,7 @@
         </div>
         <div class="contact-block">
           <p class="contact-block-title">Phone</p>
-          <a href="tel:+19196992667" class="contact-phone">(919) 699-2667</a>
+          <a href="#" class="contact-phone" onclick="openBooking(null); return false;">(919) 699-2667</a>
         </div>
         <div class="contact-block">
           <p class="contact-block-title">Hours</p>
@@ -1934,7 +1918,6 @@
         g += '<div class="menu-item-name">' + item.name + '</div>';
         if (item.desc) g += '<div class="menu-item-desc">' + item.desc + '</div>';
         if (item.note) g += '<div class="menu-item-note">' + item.note + '</div>';
-        g += '<button class="menu-item-book" onclick="openBooking(\'' + safeName + '\')" aria-label="Book ' + item.name + '">Book →</button>';
         g += '</div><div class="menu-item-right"><div class="menu-item-price">' + item.price + '</div></div></div>';
       });
       g += '</div>';
@@ -2024,19 +2007,19 @@
   function initCarousel() {
     var ARTISTS = [
       {name:'Angie',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Anne',    ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel','Polygel','Gel X']},
-      {name:'Diana',   ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X','Lashes']},
-      {name:'Helen',   ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Janice',  ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Jenna',   ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Jimmie',  ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Lee',     ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Linette', ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Lynn',    ext:'png', skills:['Dip','Gel']},
-      {name:'Nancy',   ext:'png', skills:['Dip','Gel']},
-      {name:'Ngoc',    ext:'png', skills:['Dip','Gel']},
-      {name:'Rose',    ext:'png', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Thery',   ext:'png', skills:['Gel']},
+      {name:'Anne',    ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Polygel','Gel X']},
+      {name:'Diana',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X','Lashes']},
+      {name:'Helen',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
+      {name:'Janice',  ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
+      {name:'Jenna',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
+      {name:'Jimmie',  ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
+      {name:'Lee',     ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
+      {name:'Linette', ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
+      {name:'Lynn',    ext:'jpg', skills:['Dip','Gel']},
+      {name:'Nancy',   ext:'jpg', skills:['Dip','Gel']},
+      {name:'Ngoc',    ext:'jpg', skills:['Dip','Gel']},
+      {name:'Rose',    ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
+      {name:'Thery',   ext:'jpg', skills:['Gel']},
     ];
     var DOT_SLOT = 15; // px - each dot occupies a fixed 15px slot in the track
     var track    = document.getElementById('carousel-track');
@@ -2053,7 +2036,7 @@
       card.innerHTML =
         '<div class="carousel-card-img-wrap">' +
           '<img class="carousel-card-img" src="Assets/' + a.name + '.' + a.ext + '"' +
-          ' alt="' + a.name + ', nail artist at Oasis Nails &amp; Spa" loading="lazy">' +
+          ' alt="' + a.name + ', nail artist at Oasis Nails &amp; Spa">' +
         '</div>' +
         '<div class="carousel-card-info">' +
           '<h3 class="carousel-card-name">' + a.name + '</h3>' +
@@ -2162,43 +2145,108 @@
   }
   initCarousel();
 
-  // Review carousel (mobile swipe with looping)
-  function initReviewCarousel() {
-    if (window.innerWidth > 800) return;
-    var grid = document.querySelector('.reviews-grid');
-    if (!grid) return;
-    var cards = Array.from(grid.querySelectorAll('.review-card'));
-    var n = cards.length;
-    if (n < 2) return;
+  // Reviews Carousel
+  function initReviewsCarousel() {
+    var TOTAL    = 3;
+    var DOT_SLOT = 15;
+    var track    = document.getElementById('reviews-track');
+    var viewport = document.getElementById('reviews-viewport');
+    var prevBtn  = document.getElementById('reviews-prev-btn');
+    var nextBtn  = document.getElementById('reviews-next-btn');
+    var dotsEl   = document.getElementById('reviews-dots');
+    if (!track) return;
 
-    // Build strip: [last_clone, card1, card2, …, cardN, first_clone]
-    grid.insertBefore(cards[n - 1].cloneNode(true), cards[0]);
-    grid.appendChild(cards[0].cloneNode(true));
+    var dotsTrack = document.createElement('div');
+    dotsTrack.className = 'carousel-dots-track';
+    for (var i = 0; i < TOTAL; i++) {
+      var dot = document.createElement('span');
+      dot.className = 'carousel-dot ' + (i === 0 ? 'active' : i === 1 ? 'near' : 'far');
+      dotsTrack.appendChild(dot);
+    }
+    dotsEl.appendChild(dotsTrack);
 
-    var w = grid.offsetWidth;
-    // Start at the first real card (index 1)
-    grid.scrollLeft = w;
+    function getVisible() {
+      var w = window.innerWidth;
+      if (w >= 1100) return 3;
+      if (w >= 600)  return 2;
+      return 1;
+    }
 
-    var timer = null;
-    grid.addEventListener('scroll', function () {
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        var sl = grid.scrollLeft;
-        if (sl < w * 0.5) {
-          // Snapped onto last-clone → jump to real last card
-          grid.style.scrollBehavior = 'auto';
-          grid.scrollLeft = w * n;
-          grid.style.scrollBehavior = '';
-        } else if (sl > w * n + w * 0.5) {
-          // Snapped onto first-clone → jump to real first card
-          grid.style.scrollBehavior = 'auto';
-          grid.scrollLeft = w;
-          grid.style.scrollBehavior = '';
+    function setWidths() {
+      var visible = getVisible();
+      var gap     = parseFloat(getComputedStyle(track).columnGap) || 24;
+      var cardW   = (viewport.clientWidth - gap * (visible - 1)) / visible;
+      track.querySelectorAll('.review-card').forEach(function(c) {
+        c.style.width = cardW + 'px';
+      });
+    }
+
+    function getStep() {
+      var card = track.querySelector('.review-card');
+      if (!card) return 0;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+      return card.offsetWidth + gap;
+    }
+
+    function currentCard() {
+      var step = getStep();
+      return step > 0 ? Math.round(track.scrollLeft / step) : 0;
+    }
+
+    function updateDots(idx) {
+      var maxScroll = TOTAL - getVisible();
+      var dotIdx = maxScroll > 0
+        ? Math.round(idx / maxScroll * (TOTAL - 1))
+        : 0;
+      dotsEl.querySelectorAll('.carousel-dot').forEach(function(d, i) {
+        var dist = Math.abs(i - dotIdx);
+        d.className = 'carousel-dot ' + (dist === 0 ? 'active' : dist === 1 ? 'near' : 'far');
+      });
+      var containerW = dotsEl.offsetWidth || 90;
+      var translate  = Math.round(containerW / 2 - (dotIdx + 0.5) * DOT_SLOT);
+      dotsTrack.style.transform = 'translateX(' + translate + 'px)';
+    }
+
+    function updateNav() {
+      var idx     = currentCard();
+      var visible = getVisible();
+      prevBtn.disabled = idx <= 0;
+      nextBtn.disabled = idx >= TOTAL - visible;
+      updateDots(idx);
+    }
+
+    setWidths();
+    updateNav();
+
+    window.addEventListener('resize', function() { setWidths(); updateNav(); });
+    track.addEventListener('scroll', updateNav, {passive: true});
+
+    prevBtn.addEventListener('click', function() {
+      track.scrollBy({left: -getStep(), behavior: 'smooth'});
+    });
+    nextBtn.addEventListener('click', function() {
+      track.scrollBy({left: getStep(), behavior: 'smooth'});
+    });
+
+    var wheelAccum = 0, wheelTimer = null;
+    track.addEventListener('wheel', function(e) {
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      wheelAccum += e.deltaY;
+      if (wheelTimer) clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(function() {
+        var step    = getStep();
+        var advance = Math.round(wheelAccum / (step * 0.4));
+        advance     = Math.max(-2, Math.min(2, advance));
+        if (advance !== 0) {
+          var target = Math.max(0, Math.min(currentCard() + advance, TOTAL - 1));
+          track.scrollTo({left: target * step, behavior: 'smooth'});
         }
-      }, 150);
-    }, { passive: true });
+        wheelAccum = 0; wheelTimer = null;
+      }, 50);
+    }, {passive: false});
   }
-  initReviewCarousel();
+  initReviewsCarousel();
 
   // Mobile menu
   function toggleMenu() {
