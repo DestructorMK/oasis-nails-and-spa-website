@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oasis Nails & Spa - Raleigh's Premier Luxury Nail Studio</title>
-<meta name="description" content="Oasis Nails & Spa offers a curated luxury nail experience in Raleigh, NC. Book your gel manicure, spa pedicure, nail art, and more with our expert artists.">
+<title>Oasis Nails & Spa - Wake Forest's Premier Luxury Nail Studio</title>
+<meta name="description" content="Oasis Nails & Spa offers a curated luxury nail experience in Wake Forest, NC. Book your gel manicure, spa pedicure, nail art, and more with our expert artists.">
 <meta property="og:title" content="Oasis Nails & Spa">
-<meta property="og:description" content="Raleigh's premier luxury nail studio. Expert artists. Personalized service. Elevated experience.">
+<meta property="og:description" content="Wake Forest's premier luxury nail studio. Expert artists. Personalized service. Elevated experience.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -296,6 +296,7 @@
 
   /* ── SECTIONS ── */
   section { padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 5vw, 4rem); }
+  #home { padding: 0; }
   .section-inner { max-width: 1400px; margin: 0 auto; }
   .section-label {
     font-size: 0.6875rem;
@@ -555,6 +556,12 @@
     font-size: 0.6875rem; font-weight: 400; color: var(--stone);
     font-style: italic; margin-top: 0.2rem; grid-column: 1;
   }
+  .menu-category-note {
+    font-size: 0.75rem; font-weight: 400; color: var(--charcoal-light);
+    font-style: italic; line-height: 1.6;
+    background: var(--cream); border-left: 2px solid var(--nude);
+    padding: 0.65rem 0.9rem; margin-bottom: 1.5rem;
+  }
   .menu-item-right {
     display: flex; align-items: flex-start; justify-content: flex-end;
     padding-top: 0.1rem;
@@ -653,7 +660,6 @@
     text-transform: uppercase;
     color: var(--charcoal);
     text-decoration: none;
-    border-bottom: 1px solid var(--nude);
     padding-bottom: 2px;
     transition: border-color 0.2s;
     cursor: pointer;
@@ -1182,7 +1188,10 @@
   }
   .sticky-book button {
     width: 100%;
+    display: block;
+    text-align: center;
   }
+  .contact-address { font-style: normal; }
 
   /* ── MOBILE NAV ── */
   .mobile-menu {
@@ -1315,10 +1324,10 @@
 
 <!-- HERO -->
 <main>
-<section id="home" aria-label="Hero" style="padding:0;">
+<section id="home" aria-label="Hero">
   <div class="hero">
     <div class="hero-left">
-      <p class="hero-eyebrow">Raleigh, North Carolina</p>
+      <p class="hero-eyebrow">Wake Forest, North Carolina</p>
       <h1 class="hero-title">Where care becomes<br><em>an art form.</em></h1>
       <p class="hero-sub">A sanctuary for those who appreciate the quiet luxury of a nail experience that's been thoughtfully considered - from first visit to last detail.</p>
       <div class="hero-actions">
@@ -1330,7 +1339,7 @@
       </div>
     </div>
     <div class="hero-right" aria-label="Salon photography">
-      <img class="hero-img" src="Assets/temp nail polish pic.jpg" alt="Nail art at Oasis Nails &amp; Spa">
+      <img class="hero-img" src="Assets/temp nail polish pic.jpg" alt="Nail art at Oasis Nails &amp; Spa" fetchpriority="high">
       <div class="hero-caption">Oasis Nails & Spa</div>
     </div>
   </div>
@@ -1347,7 +1356,6 @@
     <span class="marquee-item">Acrylic Full Set <span class="marquee-dot"></span></span>
     <span class="marquee-item">Dip Powder <span class="marquee-dot"></span></span>
     <span class="marquee-item">Russian Manicure <span class="marquee-dot"></span></span>
-    <!-- Duplicate for seamless loop -->
     <span class="marquee-item">Gel Manicure <span class="marquee-dot"></span></span>
     <span class="marquee-item">Spa Pedicure <span class="marquee-dot"></span></span>
     <span class="marquee-item">Nail Art <span class="marquee-dot"></span></span>
@@ -1364,7 +1372,7 @@
   <div class="section-inner">
     <div class="about-grid">
       <div class="about-img-wrap reveal">
-        <img class="about-img" src="Assets/temp inside spa.jpg" alt="Interior of Oasis Nails &amp; Spa">
+        <img class="about-img" src="Assets/temp inside spa.jpg" alt="Interior of Oasis Nails &amp; Spa" loading="lazy">
       </div>
       <div class="about-text reveal reveal-delay-2">
         <p class="section-label">Our story</p>
@@ -1413,7 +1421,7 @@
         <article class="menu-cat-card" data-cat="0" data-photo role="button" tabindex="0"
                  aria-label="Explore Manicures menu" aria-expanded="false">
           <div class="menu-cat-bg menu-cat-bg-m" aria-hidden="true"></div>
-          <img class="menu-cat-img" src="Assets/manicure.jpg" alt="" aria-hidden="true">
+          <img class="menu-cat-img" src="Assets/manicure.jpg" alt="" aria-hidden="true" loading="lazy">
           <div class="menu-cat-content">
             <h3 class="menu-cat-name">Manicures</h3>
             <span class="menu-cat-hint">Tap to explore</span>
@@ -1422,7 +1430,7 @@
         <article class="menu-cat-card" data-cat="1" data-photo role="button" tabindex="0"
                  aria-label="Explore Pedicures menu" aria-expanded="false">
           <div class="menu-cat-bg menu-cat-bg-p" aria-hidden="true"></div>
-          <img class="menu-cat-img" src="Assets/pedicure.jpg" alt="" aria-hidden="true">
+          <img class="menu-cat-img" src="Assets/pedicure.jpg" alt="" aria-hidden="true" loading="lazy">
           <div class="menu-cat-content">
             <h3 class="menu-cat-name">Pedicures</h3>
             <span class="menu-cat-hint">Tap to explore</span>
@@ -1431,7 +1439,7 @@
         <article class="menu-cat-card" data-cat="2" data-photo role="button" tabindex="0"
                  aria-label="Explore Waxing menu" aria-expanded="false">
           <div class="menu-cat-bg menu-cat-bg-w" aria-hidden="true"></div>
-          <img class="menu-cat-img" src="Assets/waxing.jpg" alt="" aria-hidden="true">
+          <img class="menu-cat-img" src="Assets/waxing.jpg" alt="" aria-hidden="true" loading="lazy">
           <div class="menu-cat-content">
             <h3 class="menu-cat-name">Waxing</h3>
             <span class="menu-cat-hint">Tap to explore</span>
@@ -1567,7 +1575,7 @@
       <div class="carousel-dots" id="reviews-dots" aria-hidden="true"></div>
     </div>
     <div class="reviews-cta reveal">
-      <a href="https://www.google.com/search?q=Oasis+Nails+%26+Spa+Wake+Forest+Raleigh+reviews" target="_blank" rel="noopener" aria-label="Read all our reviews on Google">
+      <a href="https://www.google.com/search?q=Oasis+Nails+%26+Spa+Wake+Forest+Raleigh+reviews" target="_blank" rel="noopener noreferrer" aria-label="Read all our reviews on Google">
         Read all reviews on Google
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
       </a>
@@ -1610,7 +1618,6 @@
     </div>
     <div class="contact-grid">
       <div class="contact-map reveal reveal-delay-1">
-        <!-- Replace src with your actual Google Maps embed URL -->
         <iframe
           title="Oasis Nails & Spa location map"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6459.515151933187!2d-78.52911752336006!3d35.95289987250092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89ac51f37a23cc9d%3A0xcac29ceeead2c24!2sOasis%20Nails%20%26%20Spa!5e0!3m2!1sen!2sus!4v1779568803574!5m2!1sen!2sus"
@@ -1623,10 +1630,10 @@
       <div class="contact-details reveal reveal-delay-2">
         <div class="contact-block">
           <p class="contact-block-title">Address</p>
-          <address class="contact-address" style="font-style:normal;">
-            <a href="https://www.google.com/maps/place/Oasis+Nails+%26+Spa/@35.9528999,-78.5291175,16z/data=!3m1!4b1!4m6!3m5!1s0x89ac51f37a23cc9d:0xcac29ceeead2c24!8m2!3d35.9528999!4d-78.5265426!16s%2Fg%2F11fkldvrgk?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">
-              2808 Rogers Rd #103, Wake Forest,<br>
-              Raleigh, NC 27587
+          <address class="contact-address">
+            <a href="https://www.google.com/maps/place/Oasis+Nails+%26+Spa/@35.9528999,-78.5291175,16z/data=!3m1!4b1!4m6!3m5!1s0x89ac51f37a23cc9d:0xcac29ceeead2c24!8m2!3d35.9528999!4d-78.5265426!16s%2Fg%2F11fkldvrgk?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Get directions to Oasis Nails &amp; Spa">
+              2808 Rogers Rd, Suite 103<br>
+              Wake Forest, NC 27587
             </a>
           </address>
         </div>
@@ -1645,7 +1652,7 @@
         <div class="contact-block">
           <p class="contact-block-title">Socials</p>
           <div class="social-links">
-            <a href="https://www.instagram.com/oasisnailsandspa_wakeforest/" target="_blank" rel="noopener" class="social-link" aria-label="Follow us on Instagram">Instagram</a>
+            <a href="https://www.instagram.com/oasisnailsandspa_wakeforest/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Follow us on Instagram">Instagram</a>
           </div>
         </div>
       </div>
@@ -1658,7 +1665,7 @@
 <footer role="contentinfo">
   <div class="footer-inner">
     <a href="#" class="footer-logo">Oasis <span>Nails & Spa</span></a>
-    <p class="footer-copy">© 2025 Oasis Nails & Spa · Raleigh, NC</p>
+    <p class="footer-copy">© 2026 Oasis Nails & Spa · Wake Forest, NC</p>
     <ul class="footer-links" role="list">
       <li><a href="#policy">Booking Policy</a></li>
       <li><a href="mailto:hello@oasisnailspa.com">Contact</a></li>
@@ -1668,7 +1675,7 @@
 
 <!-- STICKY MOBILE BOOK -->
 <div class="sticky-book" aria-label="Mobile booking button">
-  <button class="btn-primary" onclick="openBooking(null)" style="width:100%; display:block; text-align:center;">
+  <button class="btn-primary" onclick="openBooking(null)">
     Book Appointment
   </button>
 </div>
@@ -1748,7 +1755,11 @@
   });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeBooking();
+    if (e.key === 'Escape') {
+      const backdrop = document.getElementById('modal-backdrop');
+      if (!backdrop.classList.contains('open')) return;
+      closeBooking();
+    }
   });
 
   // Interactive services menu
@@ -1804,14 +1815,15 @@
               { name: 'Gel Polish Change Hands',           desc: '',                  price: '$30–$35' },
               { name: 'Regular Polish Change Hands',       desc: '',                  price: '$13' },
               { name: 'French Art Gel',                    desc: 'Dip $10+',          price: '$10+' },
-              { name: 'Cut Cuticle Only With Nails Service', desc: '',               price: '$10' },
+              { name: 'Cut Cuticle Only With Nails Service', desc: '',                price: '$10' },
               { name: 'Take Off Without The Service',      desc: '',                  price: '$15' },
               { name: 'Paraffin Wax',                      desc: '',                  price: '$8' },
               { name: 'Voesh Socks',                       desc: '',                  price: '$10' },
               { name: 'Gel Polish Change Toes',            desc: '',                  price: '$30–$35' },
               { name: 'Regular Polish Change Toes',        desc: '',                  price: '$15' },
               { name: 'Massage Add-on',                    desc: '',                  price: '$7' },
-              { name: 'Buff Shine',                        desc: 'Per 5 Minutes',     price: '$6' }
+              { name: 'Buff Shine',                        desc: 'Per 5 Minutes',     price: '$6' },
+              { name: 'Cateye',                            desc: '',                  price: '$10' }
             ]
           },
           {
@@ -1939,6 +1951,9 @@
         });
         html += '</div>';
       } else {
+        if (idx === 1) {
+          html += '<p class="menu-category-note">All manicure services, add-ons, and extras are also available with any pedicure. See the Manicures tab for the full list.</p>';
+        }
         cat.groups.forEach(function(g) { html += renderGroup(g); });
       }
       detailBody.setAttribute('data-cat', idx);
@@ -2002,6 +2017,7 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  window.addEventListener('pagehide', function() { observer.disconnect(); }, { once: true });
 
   // Artist Carousel
   function initCarousel() {
