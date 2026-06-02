@@ -1778,8 +1778,9 @@
               { name: 'Gel Set',             desc: 'Add Gel Polish $15 More',   price: '$55+' },
               { name: 'Gel Fill',            desc: 'Add Gel Polish $15 More',   price: '$40+' },
               { name: 'Gel Manicure',        desc: '',                          price: '$43–$45' },
-              { name: 'Dip Powder',          desc: 'Take Off Dip $3 More',      price: '$48' },
+              { name: 'Dip Powder',          desc: '',                          price: '$48-$51' },
               { name: 'Dip French',          desc: '',                          price: '$55–$58' },
+              { name: 'Dip Full Set',        desc: 'With tips',                 price: '$58+' },
               { name: 'Acrylic Set',         desc: 'Add Gel Polish $15 More',   price: '$45' },
               { name: 'Acrylic Fill',        desc: 'Add Gel Polish $15 More',   price: '$35' },
               { name: 'Regular Manicure',    desc: '',                          price: '$27' },
@@ -1894,20 +1895,22 @@
           {
             title: 'Waxing Services',
             items: [
-              { name: 'Brazilian',     desc: '', price: '$60+' },
-              { name: 'Back',          desc: '', price: '$45+' },
-              { name: 'Neck',          desc: '', price: '$25' },
-              { name: 'Full Face',     desc: '', price: '$40+' },
-              { name: 'Full Legs',     desc: '', price: '$55+' },
-              { name: 'Full Arms',     desc: '', price: '$40+' },
-              { name: 'Bikini',        desc: '', price: '$45+' },
-              { name: 'Half Legs',     desc: '', price: '$25' },
-              { name: 'Underarms',     desc: '', price: '$20+' },
-              { name: 'Eyebrow',       desc: '', price: '$12' },
-              { name: 'Chin',          desc: '', price: '$10+' },
-              { name: 'Lip',           desc: '', price: '$10' },
-              { name: 'Sideburns',     desc: '', price: '$15' },
-              { name: 'Eyebrow Tint',  desc: '', price: '$20+' }
+              { name: 'Brazilian',      desc: '', price: '$60+' },
+              { name: 'Back',           desc: '', price: '$45+' },
+              { name: 'Neck',           desc: '', price: '$25' },
+              { name: 'Full Face',      desc: '', price: '$40+' },
+              { name: 'Full Legs',      desc: '', price: '$55+' },
+              { name: 'Full Arms',      desc: '', price: '$40+' },
+              { name: 'Bikini',         desc: '', price: '$45+' },
+              { name: 'Half Legs',      desc: '', price: '$25' },
+              { name: 'Underarms',      desc: '', price: '$20+' },
+              { name: 'Eyebrow',        desc: '', price: '$12' },
+              { name: 'Chin',           desc: '', price: '$10+' },
+              { name: 'Lip',            desc: '', price: '$10' },
+              { name: 'Sideburns',      desc: '', price: '$15' },
+              { name: 'Eyebrow Tint',   desc: '', price: '$20+' },
+              { name: 'Full Set Lashes',desc: '', price: '$65' },
+              { name: 'Fill in Lashes', desc: '', price: '$30' }
             ]
           }
         ]
@@ -2022,20 +2025,20 @@
   // Artist Carousel
   function initCarousel() {
     var ARTISTS = [
-      {name:'Angie',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Anne',    ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Polygel','Gel X']},
-      {name:'Diana',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X','Lashes']},
-      {name:'Helen',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Janice',  ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Jenna',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Jimmie',  ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Lee',     ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Linette', ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel']},
-      {name:'Lynn',    ext:'jpg', skills:['Dip','Gel']},
-      {name:'Nancy',   ext:'jpg', skills:['Dip','Gel']},
-      {name:'Ngoc',    ext:'jpg', skills:['Dip','Gel']},
-      {name:'Rose',    ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X']},
-      {name:'Thery',   ext:'jpg', skills:['Gel']},
+      {name:'Angie',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel', 'Pedicure']},
+      {name:'Anne',    ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Polygel','Gel X', 'Pedicure']},
+      {name:'Diana',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X','Lashes', 'Pedicure']},
+      {name:'Helen',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X', 'Pedicure']},
+      {name:'Janice',  ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel', 'Pedicure']},
+      {name:'Jenna',   ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X', 'Pedicure']},
+      {name:'Jimmie',  ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X', 'Pedicure']},
+      {name:'Lee',     ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel', 'Pedicure']},
+      {name:'Linette', ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel', 'Gel X', 'Pedicure']},
+      {name:'Lynn',    ext:'jpg', skills:['Dip','Gel', 'Pedicure']},
+      {name:'Nancy',   ext:'jpg', skills:['Dip','Gel', 'Pedicure']},
+      {name:'Ngoc',    ext:'jpg', skills:['Dip','Gel', 'Pedicure']},
+      {name:'Rose',    ext:'jpg', skills:['Acrylic','Dip','Gel','Builder Gel','Gel X', 'Pedicure']},
+      {name:'Thery',   ext:'jpg', skills:['Gel', 'Pedicure']},
     ];
     var DOT_SLOT = 15; // px - each dot occupies a fixed 15px slot in the track
     var track    = document.getElementById('carousel-track');
