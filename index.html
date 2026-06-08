@@ -457,8 +457,6 @@
   }
   .menu-cats-row {
     display: flex;
-    flex-wrap: wrap;
-    overflow-anchor: none;
   }
 
   .menu-cat-card {
@@ -516,8 +514,6 @@
 
   /* Detail panel - dropdown below the cards row */
   .menu-detail {
-    flex: 0 0 100%;
-    order: 9;
     background: var(--warm-white);
     border-top: 1px solid var(--border-soft);
     max-height: 0;
@@ -1312,7 +1308,8 @@
     .artists-grid { grid-template-columns: 1fr; }
     .hero-carousel-btn { display: none; }
     .menu-detail-title { font-size: 1.5rem; }
-    .menu-cats-row { flex-direction: column; gap: 6px; }
+    #menu-stage { display: flex; flex-direction: column; gap: 6px; }
+    .menu-cats-row { display: contents; }
     .menu-cat-card[data-cat="0"] { order: 0; }
     .menu-cat-card[data-cat="1"] { order: 2; }
     .menu-cat-card[data-cat="2"] { order: 4; }
@@ -1510,15 +1507,15 @@
             <span class="menu-cat-hint">Tap to explore</span>
           </div>
         </article>
-        <div class="menu-detail" id="menu-detail" role="region" aria-label="Service detail" aria-live="polite">
-          <div class="menu-detail-head">
-            <h3 class="menu-detail-title" id="menu-detail-title"></h3>
-            <button class="menu-detail-close" id="menu-detail-close" aria-label="Close menu">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-          </div>
-          <div class="menu-detail-body" id="menu-detail-body"></div>
+      </div>
+      <div class="menu-detail" id="menu-detail" role="region" aria-label="Service detail" aria-live="polite">
+        <div class="menu-detail-head">
+          <h3 class="menu-detail-title" id="menu-detail-title"></h3>
+          <button class="menu-detail-close" id="menu-detail-close" aria-label="Close menu">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
         </div>
+        <div class="menu-detail-body" id="menu-detail-body"></div>
       </div>
     </div>
   </div>
