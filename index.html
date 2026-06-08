@@ -2099,24 +2099,63 @@
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   window.addEventListener('pagehide', function() { observer.disconnect(); }, { once: true });
 
-  // Hero Carousel
+  // Hero Carousel (infinite loop via clones)
   function initHeroCarousel() {
     var track = document.getElementById('hero-carousel-track');
     var prevBtn = document.getElementById('hero-prev');
     var nextBtn = document.getElementById('hero-next');
     if (!track) return;
-    var count = track.querySelectorAll('.hero-img').length;
+
+    var imgs  = Array.from(track.querySelectorAll('.hero-img'));
+    var count = imgs.length; // 4 real slides
+
+    // Slots: [clone-last, img1, img2, img3, img4, clone-first]
+    track.insertBefore(imgs[count - 1].cloneNode(true), imgs[0]);
+    track.appendChild(imgs[0].cloneNode(true));
 
     function slideW() { return track.offsetWidth || 1; }
-    function currentIdx() { return Math.round(track.scrollLeft / slideW()); }
 
-    function goTo(idx) {
-      idx = Math.max(0, Math.min(idx, count - 1));
-      track.scrollTo({ left: idx * slideW(), behavior: 'smooth' });
+    var current = 1; // index of first real slide
+
+    // Start on the first real slide with no animation
+    requestAnimationFrame(function() {
+      track.scrollLeft = current * slideW();
+    });
+
+    function jumpTo(idx) {
+      track.scrollLeft = idx * slideW();
+      current = idx;
     }
 
-    prevBtn.addEventListener('click', function() { goTo(currentIdx() - 1); });
-    nextBtn.addEventListener('click', function() { goTo(currentIdx() + 1); });
+    function goTo(idx) {
+      track.scrollTo({ left: idx * slideW(), behavior: 'smooth' });
+      current = idx;
+    }
+
+    prevBtn.addEventListener('click', function() { goTo(current - 1); });
+    nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+    // After scroll settles, jump from clone to real slide (instant, imperceptible)
+    var scrollTimer = null;
+    track.addEventListener('scroll', function() {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function() {
+        var pos = track.scrollLeft;
+        var w   = slideW();
+        if (pos < w * 0.5) {
+          jumpTo(count);          // scrolled to clone-last → jump to real last
+        } else if (pos > (count + 0.5) * w) {
+          jumpTo(1);              // scrolled to clone-first → jump to real first
+        } else {
+          current = Math.round(pos / w);
+        }
+        scrollTimer = null;
+      }, 50);
+    }, { passive: true });
+
+    window.addEventListener('resize', function() {
+      track.scrollLeft = current * slideW();
+    });
   }
   initHeroCarousel();
 
