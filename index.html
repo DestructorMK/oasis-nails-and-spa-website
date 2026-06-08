@@ -457,6 +457,8 @@
   }
   .menu-cats-row {
     display: flex;
+    flex-wrap: wrap;
+    overflow-anchor: none;
   }
 
   .menu-cat-card {
@@ -514,6 +516,8 @@
 
   /* Detail panel - dropdown below the cards row */
   .menu-detail {
+    flex: 0 0 100%;
+    order: 9;
     background: var(--warm-white);
     border-top: 1px solid var(--border-soft);
     max-height: 0;
@@ -1309,6 +1313,13 @@
     .hero-carousel-btn { display: none; }
     .menu-detail-title { font-size: 1.5rem; }
     .menu-cats-row { flex-direction: column; gap: 6px; }
+    .menu-cat-card[data-cat="0"] { order: 0; }
+    .menu-cat-card[data-cat="1"] { order: 2; }
+    .menu-cat-card[data-cat="2"] { order: 4; }
+    #menu-stage .menu-detail { order: 9; }
+    #menu-stage.active-0 .menu-detail { order: 1; }
+    #menu-stage.active-1 .menu-detail { order: 3; }
+    #menu-stage.active-2 .menu-detail { order: 5; }
     .menu-cat-card { height: 120px; }
     .menu-cat-card::after { display: none; }
     .menu-cat-card.active::before { display: none; }
@@ -1499,15 +1510,15 @@
             <span class="menu-cat-hint">Tap to explore</span>
           </div>
         </article>
-      </div>
-      <div class="menu-detail" id="menu-detail" role="region" aria-label="Service detail" aria-live="polite">
-        <div class="menu-detail-head">
-          <h3 class="menu-detail-title" id="menu-detail-title"></h3>
-          <button class="menu-detail-close" id="menu-detail-close" aria-label="Close menu">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
+        <div class="menu-detail" id="menu-detail" role="region" aria-label="Service detail" aria-live="polite">
+          <div class="menu-detail-head">
+            <h3 class="menu-detail-title" id="menu-detail-title"></h3>
+            <button class="menu-detail-close" id="menu-detail-close" aria-label="Close menu">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="menu-detail-body" id="menu-detail-body"></div>
         </div>
-        <div class="menu-detail-body" id="menu-detail-body"></div>
       </div>
     </div>
   </div>
@@ -2018,25 +2029,6 @@
       detailBody.scrollTop = 0;
     }
 
-    function placeDetail(idx) {
-      var detail = document.getElementById('menu-detail');
-      var catsRow = stage.querySelector('.menu-cats-row');
-      if (window.innerWidth <= 800) {
-        var clickedCard = stage.querySelector('[data-cat="' + idx + '"]');
-        catsRow.insertBefore(detail, clickedCard.nextSibling);
-      } else if (detail.parentNode !== stage) {
-        stage.insertBefore(detail, catsRow.nextSibling);
-      }
-    }
-
-    function returnDetail() {
-      var detail = document.getElementById('menu-detail');
-      var catsRow = stage.querySelector('.menu-cats-row');
-      if (detail.parentNode !== stage) {
-        stage.insertBefore(detail, catsRow.nextSibling);
-      }
-    }
-
     function openCategory(idx) {
       if (activeIdx === idx) { closeCategory(); return; }
       activeIdx = idx;
@@ -2045,11 +2037,21 @@
         card.classList.toggle('active', ci === idx);
         card.setAttribute('aria-expanded', ci === idx ? 'true' : 'false');
       });
+      stage.className = stage.className.replace(/\bactive-\d\b/g, '').trim();
+      stage.classList.add('active-' + idx);
       renderDetail(idx);
-      placeDetail(idx);
       var detail = document.getElementById('menu-detail');
       detail.classList.add('open');
-      setTimeout(function() { if (closeBtn) closeBtn.focus(); }, 460);
+      if (window.innerWidth <= 800) {
+        var clickedCard = stage.querySelector('[data-cat="' + idx + '"]');
+        var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 76;
+        requestAnimationFrame(function() {
+          var top = clickedCard.getBoundingClientRect().top + window.scrollY - navH;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        });
+      } else {
+        setTimeout(function() { if (closeBtn) closeBtn.focus(); }, 460);
+      }
     }
 
     function closeCategory() {
@@ -2060,9 +2062,9 @@
         card.classList.remove('active');
         card.setAttribute('aria-expanded', 'false');
       });
+      stage.className = stage.className.replace(/\bactive-\d\b/g, '').trim();
       var detail = document.getElementById('menu-detail');
       detail.classList.remove('open');
-      returnDetail();
       detailBody.removeAttribute('data-cat');
       detailBody.innerHTML = '';
       detailTitle.textContent = '';
